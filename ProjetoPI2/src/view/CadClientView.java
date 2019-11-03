@@ -471,11 +471,12 @@ public class CadClientView extends javax.swing.JFrame {
     {
         //Recarrego a tabela com os dados resgatados do banco de dados
 
-        JOptionPane.showMessageDialog(null,"Cliente cadastrado com sucesso\n" + "                      Salvo!");
+        JOptionPane.showMessageDialog(null,"Cliente cadastrado com sucesso!");
         }else{
             JOptionPane.showMessageDialog(null,"Falha ao cadastrar cliente!");
         }
 
+        JOptionPane.showMessageDialog(null,"Salvo!");
         new ListaCliente().setVisible(true);
         this.dispose();        // TODO add your handling code here:
         
