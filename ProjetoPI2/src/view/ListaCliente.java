@@ -9,8 +9,14 @@ import javax.swing.JOptionPane;
 import view.ModifcaClienteView;
 import Controller.ClienteC;
 import Model.Cliente;
+import com.sun.javafx.iio.ImageMetadata;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
+
+
 
 /**
  *
@@ -25,8 +31,7 @@ public class ListaCliente extends javax.swing.JFrame {
         initComponents();
         this.LoadTable();
     }
-    
-    
+
     public void LoadTable() {
         ArrayList<String[]> linhasClientes = ClienteC.getClientes();
 
@@ -40,9 +45,7 @@ public class ListaCliente extends javax.swing.JFrame {
             tblModCliente.addRow(c);
         }
 
-
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -74,7 +77,36 @@ public class ListaCliente extends javax.swing.JFrame {
 
         lblIDCliente.setText("ID Cliente:");
 
+        txtIDCliente.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtIDClienteFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtIDClienteFocusLost(evt);
+            }
+        });
+        txtIDCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIDClienteActionPerformed(evt);
+            }
+        });
+        txtIDCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIDClienteKeyTyped(evt);
+            }
+        });
+
         btnProcurar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Pacote_imagens/Procurar-18dp.png"))); // NOI18N
+        btnProcurar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnProcurarMouseClicked(evt);
+            }
+        });
+        btnProcurar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcurarActionPerformed(evt);
+            }
+        });
 
         pnlClientes.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Clientes Cadastrados", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -95,6 +127,11 @@ public class ListaCliente extends javax.swing.JFrame {
             }
         });
         tblClienteC.setToolTipText("");
+        tblClienteC.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblClienteCMouseClicked(evt);
+            }
+        });
         pnlClientes.setViewportView(tblClienteC);
 
         btnNovo.setText("Novo");
@@ -199,19 +236,19 @@ public class ListaCliente extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         if (tblClienteC.getRowCount() > 0) {
             //Verifico se o usuário selecionou alguma linha (Primeira linha = 0)
-                int numeroLinha = tblClienteC.getSelectedRow();
-                int salvarId = Integer.parseInt(tblClienteC.getModel().getValueAt(numeroLinha,0 ).toString());
-            if (tblClienteC.getSelectedRow() >= 0) {                
+            int numeroLinha = tblClienteC.getSelectedRow();
+            int salvarId = Integer.parseInt(tblClienteC.getModel().getValueAt(numeroLinha, 0).toString());
+            if (tblClienteC.getSelectedRow() >= 0) {
                 new ModifcaClienteView().setVisible(true);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um cliente para editar!");
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(this, "Não há clientes para editar!");
         }
-        
+
     }//GEN-LAST:event_btnModificarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
@@ -221,42 +258,42 @@ public class ListaCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void btnDeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeletarActionPerformed
-        
 
-        
-        if(tblClienteC.getRowCount()>0){
-            
-            
-            
-            int numeroLinha= tblClienteC.getSelectedRow(); //Salva o numero da linha do TABLE
+       if (tblClienteC.getRowCount() > 0) {
+
+            int numeroLinha = tblClienteC.getSelectedRow(); //Salva o numero da linha do TABLE
             int IDcliente = Integer.parseInt(tblClienteC.getModel().getValueAt(numeroLinha, 0).toString()); // Resga o id
-            
-            if(ClienteC.excluir(IDcliente)){
-                this.LoadTable();
-                JOptionPane.showMessageDialog(this,"Cliente Exluido com Sucesso");
-                }else{
-                JOptionPane.showMessageDialog(this,"Falha na Exclusão" );
-            }
-        }else{
-            JOptionPane.showMessageDialog(this,"Não há clientes para exibir");
-        }
-               
 
-   
-        // TODO add your handling code here:
+                int opcao = JOptionPane.showConfirmDialog(this, "Deseja romover cliente ?");    
+                
+                if (opcao == 0) {
+                    if (ClienteC.excluir(IDcliente)) {
+                    this.LoadTable();
+                     
+               ImageIcon icon = new ImageIcon("C:\\Users\\Kaique\\Documents/Tick_Mark_Circle_icon-icons.com_69145.png");
+               
+                JOptionPane.showMessageDialog(this, icon + "Cliente excluido com sucesso", "Excluido", WIDTH);
+                        
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Falha na Exclusão");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Não há clientes para exibir");
+        }
+      
+       
     }//GEN-LAST:event_btnDeletarActionPerformed
 
     private void btnExibirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExibirActionPerformed
-     if (tblClienteC.getRowCount() > 0) {
+        if (tblClienteC.getRowCount() > 0) {
             //Verifico se o usuário selecionou alguma linha (Primeira linha = 0)
             int numeroLinha = tblClienteC.getSelectedRow();
-                int salvarId = Integer.parseInt(tblClienteC.getModel().getValueAt(numeroLinha,0 ).toString());
+            int salvarId = Integer.parseInt(tblClienteC.getModel().getValueAt(numeroLinha, 0).toString());
             if (tblClienteC.getSelectedRow() >= 0) {
 
                 new ExibirCliente(salvarId).setVisible(true);
                 this.dispose();
-                
-                
 
             } else {
                 JOptionPane.showMessageDialog(this, "Selecione um cliente para exibir os dados!");
@@ -265,6 +302,60 @@ public class ListaCliente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Não há clientes cadastrados");
         }     // TODO add your handling code here:
     }//GEN-LAST:event_btnExibirActionPerformed
+    private void btnProcurarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcurarActionPerformed
+
+        if (txtIDCliente.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Digite um ID \n", "Campo obrigatório", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+    }//GEN-LAST:event_btnProcurarActionPerformed
+
+    private void tblClienteCMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClienteCMouseClicked
+
+    }//GEN-LAST:event_tblClienteCMouseClicked
+
+    private void txtIDClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDClienteActionPerformed
+
+    }//GEN-LAST:event_txtIDClienteActionPerformed
+
+    private void txtIDClienteFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDClienteFocusGained
+        txtIDCliente.setBackground(Color.white);
+    }//GEN-LAST:event_txtIDClienteFocusGained
+
+    private void txtIDClienteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIDClienteFocusLost
+        txtIDCliente.setBackground(Color.white);    }//GEN-LAST:event_txtIDClienteFocusLost
+
+    private void txtIDClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIDClienteKeyTyped
+        if (evt.getKeyChar() == '@') {
+
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Não é permitido essa tecla");
+            return;
+        }
+
+        char c = evt.getKeyChar();
+        if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE)) {
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Não é permitido letras");
+            return;
+        }
+
+    }//GEN-LAST:event_txtIDClienteKeyTyped
+
+    private void btnProcurarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnProcurarMouseClicked
+        
+                if (btnProcurar.getText().equals(evt)){
+
+                    evt.consume();
+                    JOptionPane.showMessageDialog(null, "Id não encontrado");
+                    return;
+     
+                }
+              
+    }//GEN-LAST:event_btnProcurarMouseClicked
+                
+    
+    
 
     /**
      * @param args the command line arguments
@@ -301,7 +392,7 @@ public class ListaCliente extends javax.swing.JFrame {
         });
 
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PnlListaCliente;
