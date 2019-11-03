@@ -272,7 +272,7 @@ public class ListaCliente extends javax.swing.JFrame {
                      
                ImageIcon icon = new ImageIcon("C:\\Users\\Kaique\\Documents/Tick_Mark_Circle_icon-icons.com_69145.png");
                
-                JOptionPane.showMessageDialog(this, icon + "Cliente excluido com sucesso", "Excluido", WIDTH);
+                JOptionPane.showMessageDialog(this, icon , "Excluido", WIDTH);
                         
                 }
             } else {
